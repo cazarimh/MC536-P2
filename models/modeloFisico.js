@@ -9,12 +9,8 @@ db.createCollection(emissao, {
     validator: {
         $jsonSchema: {
             bsonType: "object",
-            required: ["cod_em", "ano_em", "qtd_em", "localizacao", "origem", "produto", "gas"],
+            required: ["ano_em", "qtd_em", "localizacao", "origem", "produto", "gas"],
             properties: {
-                cod_em: {
-                    bsonType: "string",
-                    description: "Código da emissão, é obrigatório e deve ser composto por [localizacao].[origem].[produto].[gas]-[ano]."
-                },
                 ano_em: {
                     bsonType: "int",
                     description: "Ano registrado da emissão, é obrigatório e deve ser um ano entre 1970 e 2023."
@@ -38,14 +34,8 @@ db.createCollection(emissao, {
                 },
                 origem: {
                     bsonType: "object",
-                    required: ["cod_origem", "tipo_origem", "setor_origem", "categoria_origem", "subcategoria_origem"],
+                    required: ["tipo_origem", "setor_origem", "categoria_origem", "subcategoria_origem"],
                     properties: {
-                        cod_origem: {
-                            bsonType: "int",
-                            minimum: 0,
-                            maximum: 112,
-                            description: "Código da origem, é obrigatório e deve ser um inteiro positivo."
-                        },
                         tipo_origem: {
                             bsonType: "string",
                             enum: ["Emissão", "Emissão NCI", "Remoção", "Remoção NCI", "Bunker"],
@@ -67,14 +57,8 @@ db.createCollection(emissao, {
                 },
                 produto: {
                     bsonType: "object",
-                    required: ["cod_produto", "nome_produto", "detalhamento_produto", "recorte_produto", "atvgeral_produto"],
+                    required: ["nome_produto", "detalhamento_produto", "recorte_produto", "atvgeral_produto"],
                     properties: {
-                        cod_produto: {
-                            bsonType: "int",
-                            minimum: 0,
-                            maximum: 1466,
-                            description: "Código do produto, é obrigatório e deve ser um inteiro positivo."
-                        },
                         nome_produto: {
                             bsonType: "string",
                             description: "Nome do produto, é obrigatório e deve ser uma string."
@@ -95,14 +79,8 @@ db.createCollection(emissao, {
                 },
                 gas: {
                     bsonType: "object",
-                    required: ["cod_gas", "nome_gas"],
+                    required: ["nome_gas"],
                     properties: {
-                        cod_gas: {
-                            bsonType: "int",
-                            minimum: 0,
-                            maximum: 25,
-                            description: "Código do gas, é obrigatório e deve ser um inteiro positivo."
-                        },
                         nome_gas: {
                             bsonType: "string",
                             description: "Nome do gas, é obrigatório e deve ser uma string."
@@ -205,14 +183,8 @@ db.createCollection(estado, {
                             bsonType: "array",
                             items: {
                                 bsonType: "object",
-                                required: ["cod_area", "tipo_area", "tam_area"],
+                                required: ["tipo_area", "tam_area"],
                                 properties: {
-                                    cod_area: {
-                                        bsonType: "int",
-                                        minimum: 10000000,
-                                        maximum: 99999999,
-                                        description: "Código da área, é obrigatório e deve ser um número inteiro de 8 dígitos"
-                                    },
                                     tipo_area: {
                                         bsonType: "string",
                                         enum: ["RURAL", "PROT", "PRESERV", "PROPRE", "EXP"],
@@ -239,14 +211,8 @@ db.createCollection(bioma, {
     validator: {
         $jsonSchema: {
             bsonType: "object",
-            required: ["cod_bio", "nome_bio"],
+            required: ["nome_bio"],
             properties: {
-                cod_bio: {
-                    bsonType: "int",
-                    minimum: 0,
-                    maximum: 9,
-                    description: "Código do bioma, é obrigatório e deve ser um inteiro positivo de 1 dígito."
-                },
                 nome_bio: {
                     bsonType: "string",
                     description: "Nome do bioma, é obrigatório e deve ser uma string."
