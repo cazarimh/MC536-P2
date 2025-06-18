@@ -27,7 +27,7 @@ Autores:
   <img src="./models/modeloLogico.png" alt="Modelo Lógico" width="700"/>
 </p>
 
-<br>O [Modelo Físico](./models/modeloFisico.js) foi feito em JavaScript para integração com o MongoDB, o script de criação de definição das coleções pode ser encontrado [neste link](./models/modeloFisico.js).
+<br>O [Modelo Físico](./models/modeloFisico.js) foi feito em JavaScript para integração com o MongoDB, o script de criação e definição das coleções pode ser encontrado [neste link](./models/modeloFisico.js).
 
 ## Tecnologias utilizadas
 * **Banco de dados:** `MongoDB`  
