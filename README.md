@@ -6,7 +6,6 @@
 * [Tecnologias utilizadas](#tecnologias-utilizadas)
 * [Datasets](#datasets)
 * [Consultas Geradas](#consultas-geradas)
-* [Resultados](#resultados)
 
 ## Sobre o projeto
 Autores:
