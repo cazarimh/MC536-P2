@@ -1,15 +1,10 @@
 from pymongo import MongoClient
 import pandas as pd
 
-MONGO_URL = ""
-DB_NAME = ""
+MONGO_URI = ""
+DB_NAME = "MC536-P2"
 
-def main():
-    client = MongoClient(MONGO_URL)
-    database = client[DB_NAME]
-
-    embrapa_dataset = pd.read_csv("./dataset/cidadesPreserv.csv")
-
+def import_biomas(database, embrapa_dataset):
     bioma = embrapa_dataset['mu_bio'].drop_duplicates()
     bioma_data = list(map(lambda x: {"nome_bio": x.upper()}, bioma))
 
@@ -19,6 +14,9 @@ def main():
     result = database["bioma"].find({}, {"nome_bio": 1, "_id": 1}).to_list()
     bioma_dict = {bioma["nome_bio"]: bioma["_id"] for bioma in result}
 
+    return bioma_dict
+
+def import_estados(database, embrapa_dataset, bioma_dict):
     estado = embrapa_dataset[['cd_geocuf_', 'nm_estado_', 'sigla', 'nm_regiao']].drop_duplicates()
     estado = list(zip(estado['cd_geocuf_'], estado['nm_estado_'], estado['sigla'], list(map(lambda x: x//10, estado["cd_geocuf_"])), estado["nm_regiao"]))
 
@@ -56,123 +54,63 @@ def main():
     result = database["estado"].find({}, {"nome_uf": 1, "_id": 1}).to_list()
     estado_dict = {estado["nome_uf"]: estado["_id"] for estado in result}
 
+    return estado_dict
+
+def import_emissoes(database, path, bioma_dict, estado_dict):
+    seeg_dataset = pd.read_csv(path, keep_default_na=False, decimal=',')
+
+    emissao_data = []
+    i = 1
+    for _, row in seeg_dataset.iterrows():
+        uf_bio = {}
+        if (row['Estado'] != "Não Alocado"):
+            uf_bio["id_uf"] = estado_dict[row['Estado'].upper()]
+        if (row['Bioma'] != "NA"):
+            uf_bio["id_bio"] = bioma_dict[row['Bioma'].upper()]
+        
+        if (row['Gás'][:4] == "CO2e"):
+            gas_atual = {"nome_gas": "CO2e", "caracteristica_gas": row['Gás'][4:]}
+        else:
+            gas_atual = {"nome_gas": row['Gás']}
+
+        origem = {"tipo_origem": row['Emissão/Remoção/Bunker'], "setor_origem": row['Setor de emissão'], "categoria_origem": row['Categoria emissora'], "subcategoria_origem": row['Sub-categoria emissora']}
+        produto = {"nome_produto": row['Produto ou sistema'], "detalhamento_produto": row['Detalhamento'], "recorte_produto": row['Recorte'], "atvgeral_produto": row['Atividade geral']}
+
+        for ano in range(1970, 2024):
+            
+            emissao_atual = {"ano_em": ano, "qtd_em": float(row[str(ano)] or 0),
+                             "localizacao": uf_bio,
+                             "origem": origem,
+                             "produto": produto,
+                             "gas": gas_atual}
+            
+            emissao_data.append(emissao_atual)
+
+        if (len(emissao_data) > 9000):
+            database["emissao"].insert_many(emissao_data)
+            emissao_data = []
+            print(f'Inserção {i} feita')
+            i += 1
+    
+    if (len(emissao_data) > 0):
+        database["emissao"].insert_many(emissao_data)
+        print(f'Inserção {i} feita')
+
+
+def main():
+    client = MongoClient(MONGO_URI)
+    database = client[DB_NAME]
+
+    embrapa_dataset = pd.read_csv("./dataset/cidadesPreserv.csv")
+    bioma_dict = import_biomas(database, embrapa_dataset)
+    estado_dict = import_estados(database, embrapa_dataset, bioma_dict)
+
     database["emissao"].delete_many({})
 
-    seeg_dataset = pd.read_csv("./dataset/gasesEE-medicoes_C1.csv", keep_default_na=False)
-
-    for i, row in seeg_dataset.iterrows():
-        emissao_data = []
-
-        uf_bio = {}
-        if (row['Estado'] != "Não Alocado"):
-            uf_bio["id_uf"] = estado_dict[row['Estado'].upper()]
-        if (row['Bioma'] != "NA"):
-            uf_bio["id_bio"] = bioma_dict[row['Bioma'].upper()]
-        
-        if (row['Gás'][:4] == "CO2e"):
-            gas_atual = {"nome_gas": "CO2e", "caracteristica_gas": row['Gás'][4:]}
-        else:
-            gas_atual = {"nome_gas": row['Gás']}
-
-        for ano in range(1970, 2024):
-            
-            emissao_atual = {"ano_em": ano, "qtd_em": float(row[str(ano)].replace(',', '.')),
-                             "localizacao": uf_bio,
-                             "origem": {"tipo_origem": row['Emissão/Remoção/Bunker'], "setor_origem": row['Setor de emissão'], "categoria_origem": row['Categoria emissora'], "subcategoria_origem": row['Sub-categoria emissora']},
-                             "produto": {"nome_produto": row['Produto ou sistema'], "detalhamento_produto": row['Detalhamento'], "recorte_produto": row['Recorte'], "atvgeral_produto": row['Atividade geral']},
-                             "gas": gas_atual}
-            
-            emissao_data.append(emissao_atual)
-        
-        database["emissao"].insert_many(emissao_data)
-        print(f'Linha {i} da parte 1/4, inserida com sucesso!')
-    
-    seeg_dataset = pd.read_csv("./dataset/gasesEE-medicoes_C2.csv", keep_default_na=False)
-
-    for i, row in seeg_dataset.iterrows():
-        emissao_data = []
-
-        uf_bio = {}
-        if (row['Estado'] != "Não Alocado"):
-            uf_bio["id_uf"] = estado_dict[row['Estado'].upper()]
-        if (row['Bioma'] != "NA"):
-            uf_bio["id_bio"] = bioma_dict[row['Bioma'].upper()]
-        
-        if (row['Gás'][:4] == "CO2e"):
-            gas_atual = {"nome_gas": "CO2e", "caracteristica_gas": row['Gás'][4:]}
-        else:
-            gas_atual = {"nome_gas": row['Gás']}
-
-        for ano in range(1970, 2024):
-            
-            emissao_atual = {"ano_em": ano, "qtd_em": float(row[str(ano)].replace(',', '.')),
-                             "localizacao": uf_bio,
-                             "origem": {"tipo_origem": row['Emissão/Remoção/Bunker'], "setor_origem": row['Setor de emissão'], "categoria_origem": row['Categoria emissora'], "subcategoria_origem": row['Sub-categoria emissora']},
-                             "produto": {"nome_produto": row['Produto ou sistema'], "detalhamento_produto": row['Detalhamento'], "recorte_produto": row['Recorte'], "atvgeral_produto": row['Atividade geral']},
-                             "gas": gas_atual}
-            
-            emissao_data.append(emissao_atual)
-        
-        database["emissao"].insert_many(emissao_data)
-        print(f'Linha {i} da parte 2/4, inserida com sucesso!')
-    
-    seeg_dataset = pd.read_csv("./dataset/gasesEE-medicoes_C3.csv", keep_default_na=False)
-
-    for i, row in seeg_dataset.iterrows():
-        emissao_data = []
-
-        uf_bio = {}
-        if (row['Estado'] != "Não Alocado"):
-            uf_bio["id_uf"] = estado_dict[row['Estado'].upper()]
-        if (row['Bioma'] != "NA"):
-            uf_bio["id_bio"] = bioma_dict[row['Bioma'].upper()]
-        
-        if (row['Gás'][:4] == "CO2e"):
-            gas_atual = {"nome_gas": "CO2e", "caracteristica_gas": row['Gás'][4:]}
-        else:
-            gas_atual = {"nome_gas": row['Gás']}
-
-        for ano in range(1970, 2024):
-            
-            emissao_atual = {"ano_em": ano, "qtd_em": float(row[str(ano)].replace(',', '.')),
-                             "localizacao": uf_bio,
-                             "origem": {"tipo_origem": row['Emissão/Remoção/Bunker'], "setor_origem": row['Setor de emissão'], "categoria_origem": row['Categoria emissora'], "subcategoria_origem": row['Sub-categoria emissora']},
-                             "produto": {"nome_produto": row['Produto ou sistema'], "detalhamento_produto": row['Detalhamento'], "recorte_produto": row['Recorte'], "atvgeral_produto": row['Atividade geral']},
-                             "gas": gas_atual}
-            
-            emissao_data.append(emissao_atual)
-        
-        database["emissao"].insert_many(emissao_data)
-        print(f'Linha {i} da parte 3/4, inserida com sucesso!')
-    
-    seeg_dataset = pd.read_csv("./dataset/gasesEE-medicoes_C4.csv", keep_default_na=False)
-
-    for i, row in seeg_dataset.iterrows():
-        emissao_data = []
-
-        uf_bio = {}
-        if (row['Estado'] != "Não Alocado"):
-            uf_bio["id_uf"] = estado_dict[row['Estado'].upper()]
-        if (row['Bioma'] != "NA"):
-            uf_bio["id_bio"] = bioma_dict[row['Bioma'].upper()]
-        
-        if (row['Gás'][:4] == "CO2e"):
-            gas_atual = {"nome_gas": "CO2e", "caracteristica_gas": row['Gás'][4:]}
-        else:
-            gas_atual = {"nome_gas": row['Gás']}
-
-        for ano in range(1970, 2024):
-            
-            emissao_atual = {"ano_em": ano, "qtd_em": float(row[str(ano)].replace(',', '.')),
-                             "localizacao": uf_bio,
-                             "origem": {"tipo_origem": row['Emissão/Remoção/Bunker'], "setor_origem": row['Setor de emissão'], "categoria_origem": row['Categoria emissora'], "subcategoria_origem": row['Sub-categoria emissora']},
-                             "produto": {"nome_produto": row['Produto ou sistema'], "detalhamento_produto": row['Detalhamento'], "recorte_produto": row['Recorte'], "atvgeral_produto": row['Atividade geral']},
-                             "gas": gas_atual}
-            
-            emissao_data.append(emissao_atual)
-        
-        database["emissao"].insert_many(emissao_data)
-        print(f'Linha {i} da parte 4/4, inserida com sucesso!')
+    import_emissoes(database, "./dataset/gasesEE-medicoes_C1.csv", bioma_dict, estado_dict)
+    import_emissoes(database, "./dataset/gasesEE-medicoes_C2.csv", bioma_dict, estado_dict)
+    import_emissoes(database, "./dataset/gasesEE-medicoes_C3.csv", bioma_dict, estado_dict)
+    import_emissoes(database, "./dataset/gasesEE-medicoes_C4.csv", bioma_dict, estado_dict)
 
     client.close()
 
