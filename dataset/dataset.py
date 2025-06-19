@@ -76,9 +76,14 @@ def import_emissoes(database, path, bioma_dict, estado_dict):
         origem = {"tipo_origem": row['Emissão/Remoção/Bunker'], "setor_origem": row['Setor de emissão'], "categoria_origem": row['Categoria emissora'], "subcategoria_origem": row['Sub-categoria emissora']}
         produto = {"nome_produto": row['Produto ou sistema'], "detalhamento_produto": row['Detalhamento'], "recorte_produto": row['Recorte'], "atvgeral_produto": row['Atividade geral']}
 
+
         for ano in range(1970, 2024):
+            try:
+                qtd_em = float(row[str(ano)] or 0)
+            except:
+                qtd_em = float(row[str(ano)].replace(',', '.') or 0)
             
-            emissao_atual = {"ano_em": ano, "qtd_em": float(row[str(ano)] or 0),
+            emissao_atual = {"ano_em": ano, "qtd_em": qtd_em,
                              "localizacao": uf_bio,
                              "origem": origem,
                              "produto": produto,
@@ -89,12 +94,12 @@ def import_emissoes(database, path, bioma_dict, estado_dict):
         if (len(emissao_data) > 9000):
             database["emissao"].insert_many(emissao_data)
             emissao_data = []
-            print(f'Inserção {i} feita')
+            print(f'Inserção {i}. Arquivo {path[-5]}.')
             i += 1
     
     if (len(emissao_data) > 0):
         database["emissao"].insert_many(emissao_data)
-        print(f'Inserção {i} feita')
+        print(f'Inserção {i}. Arquivo {path[-5]}.')
 
 
 def main():
