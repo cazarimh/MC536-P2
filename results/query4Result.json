@@ -2,26 +2,26 @@
   {
     "produto": "Gado de corte",
     "qtd_em": 283021241.4484597,
-    "porcentagem": 44.44
+    "porcentagem": 49.4
   },
   {
     "produto": "Gado de leite",
     "qtd_em": 119049029.06809379,
-    "porcentagem": 18.69
-  },
-  {
-    "produto": "Arroz",
-    "qtd_em": 65323933.86955942,
-    "porcentagem": 10.26
+    "porcentagem": 20.78
   },
   {
     "produto": "Aplicação de ureia e demais fertilizantes sintéticos nitrogenados",
     "qtd_em": 41069526.66225676,
-    "porcentagem": 6.45
+    "porcentagem": 7.17
   },
   {
     "produto": "Calagem",
     "qtd_em": 24877087.072328076,
-    "porcentagem": 3.91
+    "porcentagem": 4.34
+  },
+  {
+    "produto": "Pastagem",
+    "qtd_em": 22532902.53803172,
+    "porcentagem": 3.93
   }
 ]

@@ -1,9 +1,9 @@
 /*
- Aumento da emissão de gases em São Paulo e nos outros estados no período de 1970 - 2023 e comparação entre aumento de SP e média dos outros estados
- [aumento relativo mostra a intensidade do crescimento de São Paulo em relação ao resto do Brasil]
+Aumento da emissão de gases em São Paulo e nos outros estados no período de 1970 - 2023 e comparação entre aumento de SP e média dos outros estados
+[aumento relativo mostra a intensidade do crescimento de São Paulo em relação ao resto do Brasil]
 */
 
-use('MC536');
+use('MC536-P2');
 
 db.emissao.aggregate([
   {
@@ -11,6 +11,7 @@ db.emissao.aggregate([
       ano_em: { $in: [1970, 2023] }
     }
   },
+
   {
     $lookup: {
       from: "estado",
@@ -19,7 +20,9 @@ db.emissao.aggregate([
       as: "estado"
     }
   },
+
   { $unwind: "$estado" },
+
   {
     $group: {
       _id: "$ano_em",
@@ -32,6 +35,7 @@ db.emissao.aggregate([
           ]
         }
       },
+
       emissoes_outros: {
         $sum: {
           $cond: [
@@ -43,6 +47,7 @@ db.emissao.aggregate([
       }
     }
   },
+
   {
     $project: {
       ano: "$_id",
@@ -51,6 +56,7 @@ db.emissao.aggregate([
       _id: 0
     }
   },
+
   {
     $group: {
       _id: null,
@@ -63,44 +69,46 @@ db.emissao.aggregate([
       }
     }
   },
+
   {
     $project: {
       aumento_sp: {
-        $divide: [
-          {
-            $arrayElemAt: [
-              "$anos.emissoes_sp",
-              { $indexOfArray: ["$anos.ano", 2023] }
-            ]
-          },
-          {
-            $arrayElemAt: [
-              "$anos.emissoes_sp",
-              { $indexOfArray: ["$anos.ano", 1970] }
-            ]
-          }
-        ]
+        $divide: [{
+          $arrayElemAt: [
+            "$anos.emissoes_sp",
+            { $indexOfArray: ["$anos.ano", 2023] }
+          ]
+        },
+
+        {
+          $arrayElemAt: [
+            "$anos.emissoes_sp",
+            { $indexOfArray: ["$anos.ano", 1970] }
+          ]
+        }]
       },
+
       aumento_medio: {
-        $divide: [
-          {
-            $arrayElemAt: [
-              "$anos.media_outros",
-              { $indexOfArray: ["$anos.ano", 2023] }
-            ]
-          },
-          {
-            $arrayElemAt: [
-              "$anos.media_outros",
-              { $indexOfArray: ["$anos.ano", 1970] }
-            ]
-          }
-        ]
+        $divide: [{
+          $arrayElemAt: [
+            "$anos.media_outros",
+            { $indexOfArray: ["$anos.ano", 2023] }
+          ]
+        },
+
+        {
+          $arrayElemAt: [
+            "$anos.media_outros",
+            { $indexOfArray: ["$anos.ano", 1970] }
+          ]
+        }]
       }
     }
   },
+
   {
     $project: {
+      _id: 0,
       aumento_sp: 1,
       aumento_medio: 1,
       aumento_relativo: {
