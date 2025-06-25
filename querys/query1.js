@@ -1,9 +1,16 @@
+/*
+Porcentagem da emissão da agropecuária sobre emissão total em um estado em determinado ano 
+*/
+
+use('MC536-P2');
+
 db.emissao.aggregate([
   {
     $match: {
-      ano_em: ano
+      ano_em: 2023
     }
   },
+
   {
     $lookup: {
       from: "estado",
@@ -12,12 +19,15 @@ db.emissao.aggregate([
       as: "estado"
     }
   },
+
   { $unwind: "$estado" },
+
   {
     $match: {
-      "estado.nome_uf": "estado_nome"
+      "estado.nome_uf": 'MATO GROSSO'
     }
   },
+
   {
     $group: {
       _id: null,
@@ -33,11 +43,12 @@ db.emissao.aggregate([
       }
     }
   },
+
   {
     $project: {
       _id: 0,
-      estado: "estado_nome",
-      ano: ano,
+      estado: 'MATO GROSSO',
+      ano: 2023,
       emitido_agro: "$agro_emissao",
       porcentagem_sobre_total: {
         $cond: [

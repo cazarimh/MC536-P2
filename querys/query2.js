@@ -1,6 +1,14 @@
+/*
+Evolução da (emissão agropecuária/área rural) e (emissão indústria/área urbana) ao longo dos anos
+*/
+
+use('MC536-P2');
+
 db.estado.aggregate([
   { $unwind: "$municipios" },
+
   { $unwind: "$municipios.areas" },
+
   {
     $group: {
       _id: "$municipios.areas.tipo_area",
@@ -13,9 +21,11 @@ db.estado.aggregate([
           ]
         }
       },
+
       area_total: { $sum: "$municipios.area_total" }
     }
   },
+
   {
     $group: {
       _id: null,
@@ -23,12 +33,14 @@ db.estado.aggregate([
       area_total: { $first: "$area_total" }
     }
   },
+
   {
     $project: {
       area_rural: 1,
       area_urbana: { $subtract: ["$area_total", "$area_rural"] }
     }
   },
+
   {
     $lookup: {
       from: "emissao",
@@ -38,23 +50,26 @@ db.estado.aggregate([
             "origem.setor_origem": { $in: ["Processos Industriais", "Agropecuária"] }
           }
         },
+
         {
           $group: {
             _id: {
               ano: "$ano_em",
               setor: "$origem.setor_origem"
             },
+
             emissao: { $sum: "$qtd_em" }
           }
         },
+
         { $sort: { "_id.ano": 1 } }
       ],
       as: "emissoes"
     }
   },
-  {
-    $unwind: "$emissoes"
-  },
+
+  { $unwind: "$emissoes" },
+
   {
     $project: {
       ano: "$emissoes._id.ano",
@@ -64,6 +79,7 @@ db.estado.aggregate([
       area_urbana: 1
     }
   },
+
   {
     $group: {
       _id: "$ano",
@@ -76,6 +92,7 @@ db.estado.aggregate([
           ]
         }
       },
+
       emissao_por_area_urbana: {
         $sum: {
           $cond: [
@@ -87,6 +104,7 @@ db.estado.aggregate([
       }
     }
   },
+
   {
     $project: {
       _id: 0,
@@ -102,5 +120,6 @@ db.estado.aggregate([
       }
     }
   },
+
   { $sort: { ano: 1 } }
 ])

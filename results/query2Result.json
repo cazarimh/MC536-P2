@@ -1,0 +1,326 @@
+[
+  {
+    "emissao_por_area_rural": 0.5757187514541972,
+    "emissao_por_area_urbana": 1.9055100837997758,
+    "ano": 1970,
+    "proporcao_urb_rur": 3.309793330487645
+  },
+  {
+    "emissao_por_area_rural": 0.5983811865089962,
+    "emissao_por_area_urbana": 1.909782300570583,
+    "ano": 1971,
+    "proporcao_urb_rur": 3.1915814594914087
+  },
+  {
+    "emissao_por_area_rural": 0.6257000457090561,
+    "emissao_por_area_urbana": 2.15096900307587,
+    "ano": 1972,
+    "proporcao_urb_rur": 3.4376999295858255
+  },
+  {
+    "emissao_por_area_rural": 0.6490936468550279,
+    "emissao_por_area_urbana": 2.416893288929029,
+    "ano": 1973,
+    "proporcao_urb_rur": 3.723489361880677
+  },
+  {
+    "emissao_por_area_rural": 0.6765547282677993,
+    "emissao_por_area_urbana": 2.6358569197744974,
+    "ano": 1974,
+    "proporcao_urb_rur": 3.8959995542757504
+  },
+  {
+    "emissao_por_area_rural": 0.7403023938615785,
+    "emissao_por_area_urbana": 2.867085534789629,
+    "ano": 1975,
+    "proporcao_urb_rur": 3.8728573060993177
+  },
+  {
+    "emissao_por_area_rural": 0.7761249127954337,
+    "emissao_por_area_urbana": 3.2454623858140694,
+    "ano": 1976,
+    "proporcao_urb_rur": 4.1816237725505
+  },
+  {
+    "emissao_por_area_rural": 0.7837139124096862,
+    "emissao_por_area_urbana": 3.7739736136130437,
+    "ano": 1977,
+    "proporcao_urb_rur": 4.8154990665014505
+  },
+  {
+    "emissao_por_area_rural": 0.7799185868095466,
+    "emissao_por_area_urbana": 4.180724682858501,
+    "ano": 1978,
+    "proporcao_urb_rur": 5.3604629426268815
+  },
+  {
+    "emissao_por_area_rural": 0.8048716425183687,
+    "emissao_por_area_urbana": 4.638374484186319,
+    "ano": 1979,
+    "proporcao_urb_rur": 5.762874773017566
+  },
+  {
+    "emissao_por_area_rural": 0.8701061885964838,
+    "emissao_por_area_urbana": 5.0174223877313535,
+    "ano": 1980,
+    "proporcao_urb_rur": 5.766448341006122
+  },
+  {
+    "emissao_por_area_rural": 0.8788027129815924,
+    "emissao_por_area_urbana": 4.549438897091498,
+    "ano": 1981,
+    "proporcao_urb_rur": 5.176860323582993
+  },
+  {
+    "emissao_por_area_rural": 0.8913192147763321,
+    "emissao_por_area_urbana": 4.5648860573049514,
+    "ano": 1982,
+    "proporcao_urb_rur": 5.1214940524427774
+  },
+  {
+    "emissao_por_area_rural": 0.8935606088425365,
+    "emissao_por_area_urbana": 4.6933973894595615,
+    "ano": 1983,
+    "proporcao_urb_rur": 5.252466752690788
+  },
+  {
+    "emissao_por_area_rural": 0.9277436805969625,
+    "emissao_por_area_urbana": 5.172255294350261,
+    "ano": 1984,
+    "proporcao_urb_rur": 5.575090838691718
+  },
+  {
+    "emissao_por_area_rural": 0.9357375641949882,
+    "emissao_por_area_urbana": 5.66671144930323,
+    "ano": 1985,
+    "proporcao_urb_rur": 6.055876846387247
+  },
+  {
+    "emissao_por_area_rural": 0.9612340746746427,
+    "emissao_por_area_urbana": 6.094054718338598,
+    "ano": 1986,
+    "proporcao_urb_rur": 6.3398238565370315
+  },
+  {
+    "emissao_por_area_rural": 0.9938314965905466,
+    "emissao_por_area_urbana": 6.313316182298627,
+    "ano": 1987,
+    "proporcao_urb_rur": 6.35250161013933
+  },
+  {
+    "emissao_por_area_rural": 1.017955032862383,
+    "emissao_por_area_urbana": 6.663930947696793,
+    "ano": 1988,
+    "proporcao_urb_rur": 6.546390294823256
+  },
+  {
+    "emissao_por_area_rural": 1.0481135092576295,
+    "emissao_por_area_urbana": 6.808527971700373,
+    "ano": 1989,
+    "proporcao_urb_rur": 6.4959834135930565
+  },
+  {
+    "emissao_por_area_rural": 1.3801567919678808,
+    "emissao_por_area_urbana": 6.238757591036565,
+    "ano": 1990,
+    "proporcao_urb_rur": 4.5203252466273085
+  },
+  {
+    "emissao_por_area_rural": 1.4031204819088934,
+    "emissao_por_area_urbana": 6.864378227220062,
+    "ano": 1991,
+    "proporcao_urb_rur": 4.892222952858139
+  },
+  {
+    "emissao_por_area_rural": 1.4264566186841032,
+    "emissao_por_area_urbana": 6.60674093149842,
+    "ano": 1992,
+    "proporcao_urb_rur": 4.631575082593885
+  },
+  {
+    "emissao_por_area_rural": 1.4193577734067442,
+    "emissao_por_area_urbana": 6.8847907293400485,
+    "ano": 1993,
+    "proporcao_urb_rur": 4.850637984540829
+  },
+  {
+    "emissao_por_area_rural": 1.4628540764992013,
+    "emissao_por_area_urbana": 6.795843404789611,
+    "ano": 1994,
+    "proporcao_urb_rur": 4.645605815347586
+  },
+  {
+    "emissao_por_area_rural": 1.4510834565029895,
+    "emissao_por_area_urbana": 7.422618119877334,
+    "ano": 1995,
+    "proporcao_urb_rur": 5.115224825018217
+  },
+  {
+    "emissao_por_area_rural": 1.334792412902176,
+    "emissao_por_area_urbana": 7.3847381104633705,
+    "ano": 1996,
+    "proporcao_urb_rur": 5.532499315310823
+  },
+  {
+    "emissao_por_area_rural": 1.3353968365751565,
+    "emissao_por_area_urbana": 7.680241386793576,
+    "ano": 1997,
+    "proporcao_urb_rur": 5.751280201090495
+  },
+  {
+    "emissao_por_area_rural": 1.3269731414079942,
+    "emissao_por_area_urbana": 8.182527245186309,
+    "ano": 1998,
+    "proporcao_urb_rur": 6.166309618372668
+  },
+  {
+    "emissao_por_area_rural": 1.3317504117776071,
+    "emissao_por_area_urbana": 8.014527506729964,
+    "ano": 1999,
+    "proporcao_urb_rur": 6.018040194207451
+  },
+  {
+    "emissao_por_area_rural": 1.2414458671027286,
+    "emissao_por_area_urbana": 8.40067477682717,
+    "ano": 2000,
+    "proporcao_urb_rur": 6.7668474312396425
+  },
+  {
+    "emissao_por_area_rural": 1.2345627664376564,
+    "emissao_por_area_urbana": 8.034504373634325,
+    "ano": 2001,
+    "proporcao_urb_rur": 6.507975610521586
+  },
+  {
+    "emissao_por_area_rural": 1.2903146277104682,
+    "emissao_por_area_urbana": 8.517963569984893,
+    "ano": 2002,
+    "proporcao_urb_rur": 6.601462455013124
+  },
+  {
+    "emissao_por_area_rural": 1.3383678476435519,
+    "emissao_por_area_urbana": 8.550105435377246,
+    "ano": 2003,
+    "proporcao_urb_rur": 6.388456992919632
+  },
+  {
+    "emissao_por_area_rural": 1.367156231675447,
+    "emissao_por_area_urbana": 8.926806666697285,
+    "ano": 2004,
+    "proporcao_urb_rur": 6.529470780203007
+  },
+  {
+    "emissao_por_area_rural": 1.2887344979050126,
+    "emissao_por_area_urbana": 8.92991844419655,
+    "ano": 2005,
+    "proporcao_urb_rur": 6.929215023508076
+  },
+  {
+    "emissao_por_area_rural": 1.2105678265317146,
+    "emissao_por_area_urbana": 8.967793102666155,
+    "ano": 2006,
+    "proporcao_urb_rur": 7.407922882238616
+  },
+  {
+    "emissao_por_area_rural": 1.1354221380578555,
+    "emissao_por_area_urbana": 10.24818253928208,
+    "ano": 2007,
+    "proporcao_urb_rur": 9.025878742166892
+  },
+  {
+    "emissao_por_area_rural": 1.131721036682681,
+    "emissao_por_area_urbana": 10.100999481169278,
+    "ano": 2008,
+    "proporcao_urb_rur": 8.925343926430395
+  },
+  {
+    "emissao_por_area_rural": 1.110947562279251,
+    "emissao_por_area_urbana": 8.886988506172097,
+    "ano": 2009,
+    "proporcao_urb_rur": 7.99946712870885
+  },
+  {
+    "emissao_por_area_rural": 1.1253162750078056,
+    "emissao_por_area_urbana": 10.020944496968427,
+    "ano": 2010,
+    "proporcao_urb_rur": 8.905002726365899
+  },
+  {
+    "emissao_por_area_rural": 1.1014873947787922,
+    "emissao_por_area_urbana": 10.793623053285112,
+    "ano": 2011,
+    "proporcao_urb_rur": 9.799134428998851
+  },
+  {
+    "emissao_por_area_rural": 1.0840330866824055,
+    "emissao_por_area_urbana": 11.096282499744515,
+    "ano": 2012,
+    "proporcao_urb_rur": 10.23611053579903
+  },
+  {
+    "emissao_por_area_rural": 1.0588471685745429,
+    "emissao_por_area_urbana": 11.129987921694443,
+    "ano": 2013,
+    "proporcao_urb_rur": 10.511420582706023
+  },
+  {
+    "emissao_por_area_rural": 1.076659174343757,
+    "emissao_por_area_urbana": 10.905270175151207,
+    "ano": 2014,
+    "proporcao_urb_rur": 10.128804393273446
+  },
+  {
+    "emissao_por_area_rural": 1.044772779532572,
+    "emissao_por_area_urbana": 10.886132580509924,
+    "ano": 2015,
+    "proporcao_urb_rur": 10.419617350080985
+  },
+  {
+    "emissao_por_area_rural": 1.0458095077714529,
+    "emissao_por_area_urbana": 10.637583385442424,
+    "ano": 2016,
+    "proporcao_urb_rur": 10.17162619616107
+  },
+  {
+    "emissao_por_area_rural": 0.9994576197650141,
+    "emissao_por_area_urbana": 10.672061704905008,
+    "ano": 2017,
+    "proporcao_urb_rur": 10.67785316141184
+  },
+  {
+    "emissao_por_area_rural": 0.9266332167158919,
+    "emissao_por_area_urbana": 10.76112158404302,
+    "ano": 2018,
+    "proporcao_urb_rur": 11.61314033418943
+  },
+  {
+    "emissao_por_area_rural": 0.8652923491240441,
+    "emissao_por_area_urbana": 10.447080148327236,
+    "ano": 2019,
+    "proporcao_urb_rur": 12.07346876336427
+  },
+  {
+    "emissao_por_area_rural": 0.8567297319205355,
+    "emissao_por_area_urbana": 10.491490633432734,
+    "ano": 2020,
+    "proporcao_urb_rur": 12.245974713535277
+  },
+  {
+    "emissao_por_area_rural": 0.8926520192025595,
+    "emissao_por_area_urbana": 11.577350228519586,
+    "ano": 2021,
+    "proporcao_urb_rur": 12.96961187503063
+  },
+  {
+    "emissao_por_area_rural": 0.9076923406978893,
+    "emissao_por_area_urbana": 10.866746724911383,
+    "ano": 2022,
+    "proporcao_urb_rur": 11.971839176869516
+  },
+  {
+    "emissao_por_area_rural": 0.9460293366983674,
+    "emissao_por_area_urbana": 10.944509227663891,
+    "ano": 2023,
+    "proporcao_urb_rur": 11.56888988861605
+  }
+]

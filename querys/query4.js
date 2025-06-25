@@ -1,5 +1,5 @@
 /*
-Porcentagem de emissao dos top 5 produtos mais emissores na agropecuária
+Porcentagem de emissao dos top 5 produtos mais emissores na agropecuária em uma determinada região e ano
 */
 
 use('MC536-P2');
