@@ -174,8 +174,8 @@ def query2(db: object) -> list:
 	return list(db.estado.aggregate(pipeline))
 
 def query3(db: object, state: str) -> list:
-	"""Aumento da emissão de gases em São Paulo e nos outros estados no período de 1970 - 2023 e comparação entre aumento de SP e média dos outros estados
-[aumento relativo mostra a intensidade do crescimento de São Paulo em relação ao resto do Brasil]"""
+	"""Aumento da emissão de gases em um estado e nos demais no período de 1970 - 2023 e comparação entre aumento deste e média dos demais estados
+[aumento relativo mostra a intensidade do crescimento do estado de interesse em relação ao resto do Brasil]"""
 
 	pipeline = [
 		{ "$match": { "ano_em": {"$in": [1970, 2023]} } },
