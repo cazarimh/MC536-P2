@@ -1,6 +1,6 @@
 /*
-Aumento da emissão de gases em São Paulo e nos outros estados no período de 1970 - 2023 e comparação entre aumento de SP e média dos outros estados
-[aumento relativo mostra a intensidade do crescimento de São Paulo em relação ao resto do Brasil]
+Aumento da emissão de gases em um estado e nos demais no período de 1970 - 2023 e comparação entre aumento deste e média dos demais
+[aumento relativo mostra a intensidade do crescimento de um estado em relação ao resto do Brasil]
 */
 
 use('MC536-P2');
