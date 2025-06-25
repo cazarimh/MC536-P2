@@ -2,10 +2,12 @@
 
 ## Sumário
 * [Sobre o projeto](#sobre-o-projeto)
+* [Justificativa](#justificativa)
 * [Modelagem do Banco de Dados](#modelagem-do-banco-de-dados)
 * [Tecnologias utilizadas](#tecnologias-utilizadas)
 * [Datasets](#datasets)
 * [Consultas Geradas](#consultas-geradas)
+* [Resultados](#resultados)
 
 ## Sobre o projeto
 Autores:
@@ -15,6 +17,11 @@ Autores:
 
 <br>Esse projeto foi desenvolvido durante a disciplina MC536 - Banco de Dados: Teoria e Prática. O objetivo deste projeto consiste em idealizar um banco de dados não relacional utilizando datasets distintos e realizar consultas neste banco. A realização do projeto se baseou nas ODS 2 (Fome zero e agricultura sustentável) e ODS 13 (Ação contra a mudança global do clima), escolhemos datasets que mostram emissões de GEE no Brasil e preservação de áreas das cidades do Brasil.
 <br>A partir do banco de dados resultante do projeto é possível acessar informações sobre as emissões, como a quantidade emitida (de 1970 a 2023), a localização (estado e bioma) em que ocorreu e caracterização (setor, categoria, produto, etc.), além de dados sobre a divisão do tipo de área de cada município brasileiro (com área total, preservada, protegida e rural). As consultas geradas são a respeito dos GEE no Brasil provenientes principalmente de atividades agrícolas, como descrito nas seções seguintes.
+
+## Justificativa
+
+<br> COLOCAR AQUI JUSTIFICATIVA DA ESCOLHA DO MONGODB
+
 
 ## Modelagem do Banco de Dados
 ### Imagem 1: Modelo Conceitual (Diagrama MER)
@@ -76,3 +83,6 @@ Para realizar a análise dos dados foram feitas cinco consultas não triviais em
 5. Top 10 anos com maior balanço *qtd_em* + *qtd_rem* no século 21.
 
 O código delas se encontra [aqui](./querys/). As consultas também foram implementadas em Python e podem ser encontradas [aqui](./querys/querys.py).
+
+## Resultados
+Executando as consultas listadas acima, obtivemos os resultados presentes no diretório [/results](./results/), contendo os arquivos `.json` resultante de cada uma das consultas.
