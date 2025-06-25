@@ -1,129 +1,179 @@
 from pymongo import MongoClient
 
 def query1(db, estado_nome, ano):
-    # Porcentagem da emissão da agropecuária sobre emissão total em um estado em determinado ano
+    pipeline = [
+        { "$match": { "ano_em": ano } },
+        {
+            "$lookup": {
+                "from": "estado",
+                "localField": "localizacao.id_uf",
+                "foreignField": "_id",
+                "as": "estado"
+            }
+        },
+        { "$unwind": "$estado" },
+        { "$match": { "estado.nome_uf": estado_nome } },
+        {
+            "$group": {
+                "_id": None,
+                "total_emissao": { "$sum": "$qtd_em" },
+                "agro_emissao": {
+                    "$sum": {
+                        "$cond": [
+                            { "$eq": ["$origem.setor_origem", "Agropecuária"] },
+                            "$qtd_em",
+                            0
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "estado": estado_nome,
+                "ano": ano,
+                "emitido_agro": "$agro_emissao",
+                "porcentagem_sobre_total": {
+                    "$cond": [
+                        { "$gt": ["$total_emissao", 0] },
+                        { "$multiply": [
+                            { "$divide": ["$agro_emissao", "$total_emissao"] },
+                            100
+                        ]},
+                        None
+                    ]
+                }
+            }
+        }
+    ]
 
-    # identifica estado a partir do nome
-    estado = db.estado.find_one({"nome_uf": estado_nome})
-
-    # verifica se o estado existe
-    if not estado:
-        return []
-
-    id_uf = estado["_id"]
-
-    # filtra emissão total para o estado e agrupa as emissões ao longo do ano
-    total = db.emissao.aggregate([
-        {"$match": {"ano_em": ano, "localizacao.id_uf": id_uf}},
-        {"$group": {"_id": None, "total_emissao": {"$sum": "$qtd_em"}}}
-    ])
-
-    # filtra a emissão do agro para o estado e agrupa as emissões ao longo do ano
-    agro = db.emissao.aggregate([
-        {"$match": {"ano_em": ano, "localizacao.id_uf": id_uf, "origem.setor_origem": "Agropecuária"}},
-        {"$group": {"_id": None, "emitido_agro": {"$sum": "$qtd_em"}}}
-    ])
-
-    # converte resultados para listas
-    total_result = list(total)
-    agro_result = list(agro)
-
-    # se os resultados não estiverem vazios:
-    if total_result and agro_result:
-        total_emissao = total_result[0]["total_emissao"] # total de emissões no estado no ano
-        emitido_agro = agro_result[0]["emitido_agro"]    # total de emissões do agro no estado no ano
-        porcentagem = (emitido_agro * 100.0) / total_emissao if total_emissao != 0 else 0
-
-        return [{
-            "ano": ano,
-            "estado": estado_nome,
-            "emitido_agro": emitido_agro,
-            "porcentagem_sobre_total": porcentagem
-        }]
-
-    return []
-
+    return list(db.emissao.aggregate(pipeline))
 
 def query2(db):
-    # Evolução da (emissão agropecuária/área rural) e (emissão indústria/área urbana) ao longo dos anos
-
-    # pipeline para cálculo da área total e da área rural
-    pipeline_area = [
-        # cria documentos para cada município
-        {"$unwind": "$municipios"},
-
-        # cria documentos para cada área de cada município
-        {"$unwind": "$municipios.areas"},
-
-        # filtra cada área do município como rural e faz o agrupamento de todas áreas rurais
-        {"$match": {"municipios.areas.tipo_area": "RURAL"}},
-        {"$group": {
-            "_id": None,
-            "area_rural": {"$sum": "$municipios.areas.tam_area"},
-            "area_total": {"$sum": "$municipios.area_total"}
-        }},
-        {"$project": {
-            "area_rural": 1,
-            "area_urbana": {"$subtract": ["$area_total", "$area_rural"]}
-        }}
+    pipeline = [
+        { "$unwind": "$municipios" },
+        { "$unwind": "$municipios.areas" },
+        {
+            "$group": {
+                "_id": "$municipios.areas.tipo_area",
+                "area_rural": {
+                    "$sum": {
+                        "$cond": [
+                            { "$eq": ["$municipios.areas.tipo_area", "RURAL"] },
+                            "$municipios.areas.tam_area",
+                            0
+                        ]
+                    }
+                },
+                "area_total": { "$sum": "$municipios.area_total" }
+            }
+        },
+        {
+            "$group": {
+                "_id": None,
+                "area_rural": { "$sum": "$area_rural" },
+                "area_total": { "$first": "$area_total" }
+            }
+        },
+        {
+            "$project": {
+                "area_rural": 1,
+                "area_urbana": { "$subtract": ["$area_total", "$area_rural"] }
+            }
+        },
+        {
+            "$lookup": {
+                "from": "emissao",
+                "pipeline": [
+                    {
+                        "$match": {
+                            "origem.setor_origem": {
+                                "$in": ["Processos Industriais", "Agropecuária"]
+                            }
+                        }
+                    },
+                    {
+                        "$group": {
+                            "_id": {
+                                "ano": "$ano_em",
+                                "setor": "$origem.setor_origem"
+                            },
+                            "emissao": { "$sum": "$qtd_em" }
+                        }
+                    },
+                    { "$sort": { "_id.ano": 1 } }
+                ],
+                "as": "emissoes"
+            }
+        },
+        { "$unwind": "$emissoes" },
+        {
+            "$project": {
+                "ano": "$emissoes._id.ano",
+                "setor": "$emissoes._id.setor",
+                "emissao": "$emissoes.emissao",
+                "area_rural": 1,
+                "area_urbana": 1
+            }
+        },
+        {
+            "$group": {
+                "_id": "$ano",
+                "emissao_por_area_rural": {
+                    "$sum": {
+                        "$cond": [
+                            { "$eq": ["$setor", "Agropecuária"] },
+                            {
+                                "$cond": [
+                                    { "$ne": ["$area_rural", 0] },
+                                    { "$divide": ["$emissao", "$area_rural"] },
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                },
+                "emissao_por_area_urbana": {
+                    "$sum": {
+                        "$cond": [
+                            { "$eq": ["$setor", "Processos Industriais"] },
+                            {
+                                "$cond": [
+                                    { "$ne": ["$area_urbana", 0] },
+                                    { "$divide": ["$emissao", "$area_urbana"] },
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "ano": "$_id",
+                "emissao_por_area_rural": 1,
+                "emissao_por_area_urbana": 1,
+                "proporcao_urb_rur": {
+                    "$cond": [
+                        { "$ne": ["$emissao_por_area_rural", 0] },
+                        { "$divide": ["$emissao_por_area_urbana", "$emissao_por_area_rural"] },
+                        0
+                    ]
+                }
+            }
+        },
+        { "$sort": { "ano": 1 } }
     ]
 
-    # executa o pipeline para calcular as áreas
-    areas = list(db.estado.aggregate(pipeline_area))
-    if not areas:
-        return []
-
-    area_rural = areas[0]["area_rural"]
-    area_urbana = areas[0]["area_urbana"]
-
-    # pipeline para agrupar as emissões por setor e ano
-    pipeline_emissao = [
-        {"$match": {"origem.setor_origem": {"$in": ["Processos Industriais", "Agropecuária"]}}},
-        {"$group": {
-            "_id": {"ano": "$ano_em", "setor": "$origem.setor_origem"},
-            "emissao": {"$sum": "$qtd_em"}
-        }}
-    ]
-
-    # executa a pipeline das emissões
-    emissoes = list(db.emissao.aggregate(pipeline_emissao))
-
-    # dicionário para organizar resultados por ano
-    resultado_por_ano = {}
-
-    for emissao in emissoes:
-        ano = emissao["_id"]["ano"]
-        setor = emissao["_id"]["setor"]
-        qtd_emissao = emissao["emissao"]
-
-        # se o ano não estiver, cria pela primeira vez
-        if ano not in resultado_por_ano:
-            resultado_por_ano[ano] = {"ano": ano, "emissao_por_area_rural": 0, "emissao_por_area_urbana": 0}
-
-        # calcula a emissão por área específica de acordo com o setor
-        if setor == "Agropecuária":
-            resultado_por_ano[ano]["emissao_por_area_rural"] = qtd_emissao / area_rural if area_rural != 0 else 0
-        elif setor == "Processos Industriais":
-            resultado_por_ano[ano]["emissao_por_area_urbana"] = qtd_emissao / area_urbana if area_urbana != 0 else 0
-
-    # resultado em uma lista ordenada por ano 
-    resultado = []
-    for dados in sorted(resultado_por_ano.values(), key=lambda x: x["ano"]):
-        rural = dados["emissao_por_area_rural"]
-        urbana = dados["emissao_por_area_urbana"]
-        proporcao = urbana / rural if rural != 0 else 0
-
-        resultado.append({
-            "ano": dados["ano"],
-            "emissao_por_area_rural": rural,
-            "emissao_por_area_urbana": urbana,
-            "proporcao_urb_rur": proporcao
-        })
-
-    return resultado
+    return list(db.estado.aggregate(pipeline))
 
 def main():
-    client = MongoClient("mongodb://localhost:27017/")
+    client = MongoClient("")
     db = client[""]
 
     print("\n========================== Query1 ==========================")
