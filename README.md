@@ -76,7 +76,7 @@ Para realizar a análise dos dados foram feitas cinco consultas não triviais em
 
 2. Evolução da (emissão agropecuária/área rural) e (emissão indústria/área urbana) ao longo dos anos.
 
-3. Aumento da emissão de gases em São Paulo e nos outros estados no período de 1970 - 2023 e comparação entre aumento de SP e média dos outros estados. <br> Obs: Aumento relativo mostra a intensidade do crescimento de São Paulo em relação ao resto do Brasil.
+3. Aumento da emissão de gases em um estado e nos demais no período de 1970 - 2023 e comparação entre aumento deste e média dos demais. <br> Obs: Aumento relativo mostra a intensidade do crescimento de um estado em relação ao resto do Brasil.
 
 4. Porcentagem de emissao dos top 5 produtos mais emissores na agropecuária em uma determinada região e ano.
 
