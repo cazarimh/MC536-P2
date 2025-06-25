@@ -48,7 +48,7 @@ db.emissao.aggregate([
     $project: {
       _id: 0,
       estado: 'MATO GROSSO',
-      ano: 2023,
+      ano: {$literal: 2023},
       emitido_agro: "$agro_emissao",
       porcentagem_sobre_total: {
         $cond: [
